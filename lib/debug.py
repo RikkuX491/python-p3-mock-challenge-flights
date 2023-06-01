@@ -16,6 +16,6 @@ if __name__ == '__main__':
 
     customers = [Customer(fake.first_name(), fake.last_name()) for i in range(50)]
     flights = [Flight(rc(FLIGHT_NAMES)) for i in range(25)]
-    bookings = [Booking(rc(customers), rc(flights), randint(1, 5)) for i in range(200)]
+    bookings = [Booking(rc(customers), rc(flights), randint(500, 3000)) for i in range(200)]
 
     ipdb.set_trace()

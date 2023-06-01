@@ -89,12 +89,12 @@ here and the tests will pass, but you don't have to this time around!
   - Bookings should be initialized with a customer, flight, and a price (a number)
 - `Booking property price()`
   - Returns the price for the booking
-  - Price must be a number between 1 and 5, inclusive
+  - Price must be a number between 500 and 3000, inclusive
   - `raise Exception` if setter validation fails
 
 ### Object Relationships
 
-#### Booking
+#### Bookig
 
 - `Booking customer`
   - Returns the customer object for that booking

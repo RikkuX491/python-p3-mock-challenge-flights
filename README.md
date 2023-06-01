@@ -94,7 +94,7 @@ here and the tests will pass, but you don't have to this time around!
 
 ### Object Relationships
 
-#### Bookig
+#### Booking
 
 - `Booking customer`
   - Returns the customer object for that booking

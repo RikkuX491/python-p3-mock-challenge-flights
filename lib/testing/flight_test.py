@@ -29,8 +29,8 @@ class TestFlight:
         '''flight has many bookings'''
         flight = Flight("Jetblue")
         customer = Customer('Tom', 'Anderson')
-        booking_1 = Booking(customer, flight, 2)
-        booking_2 = Booking(customer, flight, 5)
+        booking_1 = Booking(customer, flight, 2000)
+        booking_2 = Booking(customer, flight, 1500)
 
         assert len(flight.bookings()) == 2
         assert booking_1 in flight.bookings()
@@ -42,7 +42,7 @@ class TestFlight:
         flight.bookings(1)
         assert not flight.bookings()
         customer = Customer('Henry', 'Smith')
-        booking = Booking(customer, flight, 2)
+        booking = Booking(customer, flight, 2000)
         assert booking in flight.bookings()
 
     def test_has_many_flights(self):
@@ -50,8 +50,8 @@ class TestFlight:
         flight = Flight("American Airlines")
         customer = Customer('Alan', 'Turing')
         customer_2 = Customer('Albert', 'Einstein')
-        Booking(customer, flight, 2)
-        Booking(customer_2, flight, 5)
+        Booking(customer, flight, 1200)
+        Booking(customer_2, flight, 2500)
 
         assert len(flight.customers()) == 2
         assert customer in flight.customers()
@@ -71,10 +71,10 @@ class TestFlight:
         flight = Flight("Jetblue")
         customer = Customer('Steve', 'Jobs')
         customer_2 = Customer('Bob', 'Hope')
-        Booking(customer, flight, 2)
-        Booking(customer_2, flight, 5)
+        Booking(customer, flight, 2000)
+        Booking(customer_2, flight, 1500)
 
-        assert(flight.average_price() == 3.5)
+        assert(flight.average_price() == 1750.0)
 
     def test_get_all_flights(self):
         '''test has class attribute all'''

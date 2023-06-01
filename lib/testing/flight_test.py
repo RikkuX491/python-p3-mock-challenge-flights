@@ -23,7 +23,7 @@ class TestFlight:
 
         with pytest.raises(Exception):
             flight = Flight("American Airlines")
-            flight.name = "Delta Air Lines"
+            flight.airline = "Delta Air Lines"
 
     def test_has_many_bookings(self):
         '''flight has many bookings'''

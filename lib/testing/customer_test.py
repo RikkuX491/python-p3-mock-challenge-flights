@@ -37,8 +37,8 @@ class TestCustomer:
         '''customer has many bookings'''
         flight = Flight("American Airlines")
         customer = Customer('Chris', 'Jackson')
-        booking_1 = Booking(customer, flight, 2)
-        booking_2 = Booking(customer, flight, 5)
+        booking_1 = Booking(customer, flight, 2000)
+        booking_2 = Booking(customer, flight, 2500)
 
         assert len(customer.bookings()) == 2
         assert booking_1 in customer.bookings()
@@ -50,7 +50,7 @@ class TestCustomer:
         customer.bookings(1)
         assert not customer.bookings()
         flight = Flight("Jetblue")
-        booking = Booking(customer, flight, 5)
+        booking = Booking(customer, flight, 1550)
         customer.bookings(booking)
         assert booking in customer.bookings()
 
@@ -60,8 +60,8 @@ class TestCustomer:
         flight_2 = Flight("Delta Air Lines")
 
         customer = Customer('Ernie', 'Thompson')
-        Booking(customer, flight, 2)
-        Booking(customer, flight_2, 5)
+        Booking(customer, flight, 2500)
+        Booking(customer, flight_2, 1500)
 
         assert flight in customer.flights()
         assert flight_2 in customer.flights()
@@ -89,7 +89,7 @@ class TestCustomer:
         '''test get_number_of_bookings()'''
         flight = Flight("Spirit Airlines")
         customer = Customer('Steve', 'Jobs')
-        Booking(customer, flight, 2)
-        Booking(customer, flight, 5)
+        Booking(customer, flight, 2500)
+        Booking(customer, flight, 1000)
 
         assert customer.num_bookings() == 2

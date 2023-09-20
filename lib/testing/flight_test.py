@@ -96,12 +96,12 @@ class TestFlight:
         flight = Flight("jetBlue")
         customer = Customer("Ian", "Jackson")
         customer_2 = Customer("Jack", "Smith")
-        Booking(customer, flight, 900)
-        Booking(customer_2, flight, 2000)
-        Booking(customer_2, flight, 1750)
+        Booking(customer, flight, 903)
+        Booking(customer_2, flight, 2007)
+        Booking(customer_2, flight, 1759)
 
         # rounds the result to 1 decimal place
-        assert flight.average_price() == 1550.0
+        assert flight.average_price() == 1556.3
         
         Booking.all = []
         assert flight.average_price() == 0.0

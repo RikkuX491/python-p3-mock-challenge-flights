@@ -1,87 +1,132 @@
 import pytest
 
-from classes.flight import Flight
-from classes.customer import Customer
-from classes.booking import Booking
+from classes.many_to_many import Flight
+from classes.many_to_many import Customer
+from classes.many_to_many import Booking
+
 
 class TestFlight:
-    '''Flight in flight.py'''
+    """Flight in many_to_many.py"""
 
     def test_has_airline(self):
-        '''has the airline passed into __init__'''
-        flight = Flight("Jetblue")
+        """Flight is initialized with an airline"""
+        flight = Flight("jetBlue")
 
-        assert flight.airline == "Jetblue"
+        assert flight.airline == "jetBlue"
 
-    def test_validates_airline(self):
-        '''has airline as unchangeable string'''
-        with pytest.raises(Exception):
-            Flight('')
+    def test_airline_is_mutable_string(self):
+        """airline is a mutable string"""
+        flight = Flight("jetBlue")
+        flight.airline = "Delta Air Lines"
 
-        with pytest.raises(Exception):
-            Flight(1)
+        assert flight.airline == "Delta Air Lines"
+        assert isinstance(flight.airline, str)
 
-        with pytest.raises(Exception):
-            flight = Flight("American Airlines")
-            flight.airline = "Delta Air Lines"
+        flight.airline = 7
+        assert flight.airline == "Delta Air Lines"
+
+    def test_airline_is_valid(self):
+        """airline must be 1 or more characters long"""
+        flight = Flight("jetBlue")
+        assert len(flight.airline) > 0
+        
+        flight.airline = ""
+        assert flight.airline == "jetBlue"
 
     def test_has_many_bookings(self):
-        '''flight has many bookings'''
-        flight = Flight("Jetblue")
-        customer = Customer('Tom', 'Anderson')
-        booking_1 = Booking(customer, flight, 2000)
-        booking_2 = Booking(customer, flight, 1500)
+        """flight has many bookings"""
+        flight = Flight("jetBlue")
+        customer = Customer("Alice", "Smith")
+        booking_1 = Booking(customer, flight, 900)
+        booking_2 = Booking(customer, flight, 2000)
 
         assert len(flight.bookings()) == 2
         assert booking_1 in flight.bookings()
         assert booking_2 in flight.bookings()
 
-    def test_flight_bookings_type_booking(self):
-        '''restaurant bookings are of type Booking'''
-        flight = Flight("American Airlines")
-        flight.bookings(1)
-        assert not flight.bookings()
-        customer = Customer('Henry', 'Smith')
-        booking = Booking(customer, flight, 2000)
-        assert booking in flight.bookings()
+    def test_bookings_of_type_booking(self):
+        """flight bookings are of type Booking"""
+        flight = Flight("jetBlue")
+        customer = Customer("Barry", "Jackson")
+        Booking(customer, flight, 900)
+        Booking(customer, flight, 2000)
 
-    def test_has_many_flights(self):
-        '''flight has many customers'''
-        flight = Flight("American Airlines")
-        customer = Customer('Alan', 'Turing')
-        customer_2 = Customer('Albert', 'Einstein')
-        Booking(customer, flight, 1200)
-        Booking(customer_2, flight, 2500)
+        assert isinstance(flight.bookings()[0], Booking)
+        assert isinstance(flight.bookings()[1], Booking)
+
+    def test_has_many_customers(self):
+        """flight has many customers"""
+        flight = Flight("jetBlue")
+        customer = Customer("Cindy", "Jackson")
+        customer_2 = Customer("Dylan", "Jones")
+        Booking(customer, flight, 900)
+        Booking(customer_2, flight, 2000)
 
         assert len(flight.customers()) == 2
         assert customer in flight.customers()
         assert customer_2 in flight.customers()
 
-    def test_flight_customers_type_customer(self):
-        '''flight customers are of type Customer'''
-        flight = Flight("Jetblue")
-        flight.customers(1)
-        assert not flight.customers()
-        customer = Customer('Tom', 'Smith')
-        flight.customers(customer)
-        assert customer in flight.customers()
+    def test_customers_of_type_customer(self):
+        """customers must be of type Customer"""
+        flight = Flight("jetBlue")
+        customer = Customer("Ernie", "Jackson")
+        customer_2 = Customer("Frank", "Anderson")
+        Booking(customer, flight, 900)
+        Booking(customer_2, flight, 2000)
 
-    def test_average(self):
-        '''average_price() gets average of flight's booking prices'''
-        flight = Flight("Jetblue")
-        customer = Customer('Steve', 'Jobs')
-        customer_2 = Customer('Bob', 'Hope')
-        Booking(customer, flight, 2000)
-        Booking(customer_2, flight, 1500)
+        assert isinstance(flight.customers()[0], Customer)
+        assert isinstance(flight.customers()[1], Customer)
 
-        assert(flight.average_price() == 1750.0)
+    def test_customers_are_unique(self):
+        """customers are unique"""
+        flight = Flight("jetBlue")
+        customer_1 = Customer("Gregory", "Anderson")
+        customer_2 = Customer("Hugh", "Jones")
+        Booking(customer_1, flight, 900)
+        Booking(customer_2, flight, 2000)
+        Booking(customer_1, flight, 1500)
 
-    def test_get_all_flights(self):
-        '''test has class attribute all'''
-        Flight.all = []
-        flight = Flight("Jetblue")
-        flight_2 = Flight("Delta Air Lines")
+        assert len(set(flight.customers())) == len(flight.customers())
+        assert len(flight.customers()) == 2
+        assert customer_1 in flight.customers()
+        assert customer_2 in flight.customers()
+
+    def test_average_price(self):
+        """returns average of flight's booking prices"""
+        flight = Flight("jetBlue")
+        customer = Customer("Ian", "Jackson")
+        customer_2 = Customer("Jack", "Smith")
+        Booking(customer, flight, 900)
+        Booking(customer_2, flight, 2000)
+        Booking(customer_2, flight, 1750)
+
+        # rounds the result to 1 decimal place
+        assert flight.average_price() == 1550.0
         
-        assert len(Flight.all) == 2
-        assert flight in Flight.all
-        assert flight_2 in Flight.all
+        Booking.all = []
+        assert flight.average_price() == 0.0
+
+    def test_top_two_expensive_flights(self):
+        """returns the top 2 expensive flights in descending order by average price"""
+        Booking.all = []
+        flight_1 = Flight("jetBlue")
+        flight_2 = Flight("Delta Air Lines")
+        flight_3 = Flight("Hawaiian Airlines")
+        flight_4 = Flight("Alaskan Airlines")
+        customer = Customer("Alice", "Smith")
+        customer_2 = Customer("Bruce", "Jackson")
+        Booking(customer, flight_1, 2000)
+        Booking(customer, flight_2, 1750)
+        Booking(customer, flight_3, 1500)
+        Booking(customer, flight_4, 900)
+        Booking(customer_2, flight_1, 2000)
+        Booking(customer_2, flight_2, 2000)
+        Booking(customer_2, flight_3, 2000)
+
+        assert flight_1 in Flight.top_two_expensive_flights()
+        assert flight_2 in Flight.top_two_expensive_flights()
+        assert flight_3 not in Flight.top_two_expensive_flights()
+        assert flight_4 not in Flight.top_two_expensive_flights()
+
+        Booking.all = []
+        assert Flight.top_two_expensive_flights() is None

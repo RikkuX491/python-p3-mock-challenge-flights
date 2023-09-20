@@ -16,7 +16,7 @@ class TestBooking:
         booking_2 = Booking(customer, flight, 2000)
 
         assert booking_1.price == 900
-        assert booking_2.rating == 2000
+        assert booking_2.price == 2000
 
     def test_price_is_immutable(self):
         """price is immutable"""

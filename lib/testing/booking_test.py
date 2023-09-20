@@ -1,43 +1,28 @@
 import pytest
 
-from classes.flight import Flight
-from classes.customer import Customer
-from classes.booking import Booking
+from classes.many_to_many import Flight
+from classes.many_to_many import Customer
+from classes.many_to_many import Booking
 
-class TestBookings:
-    '''Booking in booking.py'''
 
-    def test_has_customer_flight_price(self):
-        '''has the customer, flight, and price passed into __init__'''
-        customer = Customer('Steve', 'Jobs')
-        flight = Flight("Mels")
-        booking = Booking(customer, flight, 2500)
+class TestBooking:
+    """Booking in many_to_many.py"""
 
-        assert booking.customer == customer
-        assert booking.flight == flight
-        assert booking.price == 2500
+    def test_has_price(self):
+        """Booking is initialized with a price"""
+        flight = Flight("jetBlue")
+        customer = Customer("Alice", "Smith")
+        booking_1 = Booking(customer, flight, 900)
+        booking_2 = Booking(customer, flight, 2000)
 
-    def test_validates_customer(self):
-        '''checks to ensure customer is of type Customer'''
-        flight = Flight("Delta Air Lines")
-        
-        with pytest.raises(Exception):
-            Booking(1, flight, 2300)
+        assert booking_1.price == 900
+        assert booking_2.rating == 2000
 
-    def test_validates_flight(self):
-        '''checks to ensure flight is of type Flight'''
-        customer = Customer('Rick', 'Jackson')
-        
-        with pytest.raises(Exception):
-            Booking(customer, 1235, 2300)
+    def test_price_is_immutable(self):
+        """price is immutable"""
+        flight = Flight("jetBlue")
+        customer = Customer("Alice", "Smith")
+        booking_1 = Booking(customer, flight, 900)
 
-    def test_validates_price(self):
-        '''checks to ensure price is integer between 1 and 5, inclusive'''
-        customer = Customer('Steve', 'Wayne')
-        flight = Flight("Jetblue")
-
-        with pytest.raises(Exception):
-            Booking(customer, flight, 450)
-
-        with pytest.raises(Exception):
-            Booking(customer, flight, 4000)
+        booking_1.price = 600
+        assert booking_1.price == 900

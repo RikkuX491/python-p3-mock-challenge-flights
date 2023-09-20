@@ -22,7 +22,8 @@ start coding_. Remember to identify a single source of truth for your data.
 
 ## Instructions
 
-To get started, run `pipenv install` while inside of this directory.
+To get started, run `pipenv install` while inside of this directory. Then run
+`pipenv shell` to jump into the shell.
 
 Build out all of the methods listed in the deliverables. The methods are listed
 in a suggested order, but you can feel free to tackle the ones you think are
@@ -55,92 +56,91 @@ comments describing your progress.
 Write the following methods in the classes in the files provided. Feel free to
 build out any helper methods if needed.
 
-### Initializers, Readers, and Writers
-
-For any invalid inputs raise an `Exception`. In your future work, you should
-raise specific types of exceptions for specific error cases. You can do that
-here and the tests will pass, but you don't have to this time around!
+### Initializers and Properties
 
 #### Customer
 
 - `Customer __init__(self, first_name, last_name)`
-  - Customer should be initialized with a first name and last name
-- `Customer property first_name()` and `Customer property last_name()`
+  - Customer is initialized with a given name and family name
+- `Customer property first_name` and `Customer property last_name`
   - Return first and last name, respectively
   - Names must be of type `str`
   - Names must be between 1 and 25 characters, inclusive
-  - `raise Exception` if setter validation fails
+  - Names **can be** changed after the `Customer` object is initialized
 
 #### Flight
 
 - `Flight __init__(self, airline)`
-  - Flights should be initialized with an airline, as a string
-- `Flight property airline()`
+  - Flight is initialized with an airline
+- `Flight property airline`
   - Returns the flight's airline
-  - Must be 1 or more characters
-  - Should not be able to change after the flight is created
-  - `raise Exception` if setter validation fails
-- `Flight class attribute all`
-  - Returns a list of all flights
+  - Airlines must be of type `str`
+  - Airlines must be 1 or more characters
+  - Airlines **can be** changed after the `Flight` object is initialized
 
 #### Booking
 
 - `Booking __init__(self, customer, flight, price)`
-  - Bookings should be initialized with a customer, flight, and a price (a number)
-- `Booking property price()`
-  - Returns the price for the booking
-  - Price must be a number between 500 and 3000, inclusive
-  - `raise Exception` if setter validation fails
+  - Booking is initialized with a `Customer` instance, a `Flight` instance, and a price
+- `Booking property price`
+  - Returns the price for a flight
+  - Prices must be of type `int`
+  - Prices must be between 500 and 3000, inclusive
+  - Prices **cannot be** changed after the `Booking` object is initialized
 
-### Object Relationships
+### Object Relationship Methods and Properties
 
 #### Booking
 
 - `Booking customer`
   - Returns the customer object for that booking
   - Must be of type `Customer`
-  - `raise Exception` if validation fails
-  
+  - Customers **can be** changed after the `Booking` object is initialized
 - `Booking flight`
-  - Returns the flight object for that given booking
+  - Returns the flight object for that booking
   - Must be of type `Flight`
-  - `raise Exception` if validation fails
+  - Flights **can be** changed after the `Booking` object is initialized
 
 #### Flight
 
-- `Flight bookings(self, new_booking=None)`
-  - Creates a new booking if called with new booking
+- `Flight bookings()`
   - Returns a list of all bookings for that flight
   - Bookings must be of type `Booking`
-  - _Should be called from `Booking.__init__`_
-- `Flight customers(self, new_customer=None)`
-  - Creates a new customer if called with new customer
-  - Returns a **unique** list of all customers who have booked a particular flight.
+- `Flight customers()`
+  - Returns a **unique** list of all customers who have booked that flight.
   - Customers must be of type `Customer`
-  - _Should be called from `Booking.__init__`_
 
 #### Customer
 
-- `Customer flights(self, new_flight=None)`
-  - Creates a new flight if called with new flight
+- `Customer bookings()`
+  - Returns a list of all bookings a customer has made
+  - Bookings must be of type `Booking`
+- `Customer flights()`
   - Returns a **unique** list of all flights a customer has booked
   - Flights must be of type `Flight`
-  - _Should be called from `Booking.__init__`_
-- `Customer bookings(self, new_booking=None)`
-  - Creates a new booking if called with new booking
-  - Returns a list of all bookings a customer has made
-  - _Should be called from `Booking.__init__`_
 
 ### Aggregate and Association Methods
 
 #### Customer
 
-- `Customer num_bookings()`
-  - Returns the total number of bookings that a customer has made
+- `Customer num_cheap_bookings()`
+  - **Reminder**: a booking is considered cheap if its price is less than 1000
+  - Returns the total number of cheap bookings that a customer has purchased
+  - Returns `0` if the customer never purchased a cheap booking
+- `Customer has_booked_flight(flight)`
+  - Receives a `Flight` instance as argument
+  - Returns `True` if the customer has made a booking for the given flight object
+  - Returns `False` otherwise
 
 #### Flight
 
-- `Flight average_price(self)`
+- `Flight average_price()`
   - Returns the average price for a flight based on its bookings
-  - Reminder: you can calculate the average by adding up all the prices and
+  - Returns `0.0` if the customer has no bookings
+  - Rounds the result to the first decimal digit
+  - **Reminder**: you can calculate the average by adding up all the prices and
     dividing by the number of prices
+- `Flight classmethod top_two_expensive_flights()`
+  - Returns the top 2 expensive flights in descending order by average price
+  - Flights must be of type `Flight`
+  - Returns `None` if there are no bookings
